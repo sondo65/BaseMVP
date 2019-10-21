@@ -8,14 +8,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/cl_root_view"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false">
+        android:gravity="bottom"
+        app:umanoPanelHeight="68dp"
+        app:umanoShadowHeight="4dp"
+        app:umanoParallaxOffset="100dp"
+        app:umanoDragView="@+id/dragView"
+        app:umanoOverlay="true">
 
-        <LinearLayout
-            android:id="@+id/activity_main"
+        <FrameLayout
+            android:id="@+id/frm_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -39,10 +46,85 @@
                     android:background="@color/light_gray" />
 
             </com.google.android.material.appbar.AppBarLayout>
+            <EditText
+                android:layout_gravity="bottom"
+                android:text="@string/app_google_play_store_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+            </EditText>
+
+        </FrameLayout>
+
+        <!-- SLIDING LAYOUT -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="false"
+            android:id="@+id/dragView">
+
+            <LinearLayout
+                android:background="@color/light_blue"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/rgMain"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbCategory"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/ic_keyboard_backspace_24px"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="12dp"
+                        android:text="Danh mục"
+                        android:textColor="#000"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@+id/rbMyLocation"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/ic_delete_white_24dp"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="12dp"
+                        android:text="Địa chỉ của tôi"
+                        android:textColor="#000"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@+id/rbSavedLocation"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/ic_cut_white_24dp"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="12dp"
+                        android:text="Địa điểm đã lưu"
+                        android:textColor="#000"
+                        android:textSize="14sp" />
+                </RadioGroup>
+
+            </LinearLayout>
 
         </LinearLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"

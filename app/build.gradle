@@ -39,6 +39,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$rootProject.androidxVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.androidxConstraintLayoutVersion"
 
+    implementation "com.sothree.slidinguppanel:library:3.4.0"
+
     // font
     implementation "uk.co.chrisjenx:calligraphy:$rootProject.calligraphyVersion"
 

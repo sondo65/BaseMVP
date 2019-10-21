@@ -18,8 +18,8 @@ package com.sondo65.basemvp.di.component;
 import com.sondo65.basemvp.di.PerActivity;
 import com.sondo65.basemvp.di.module.ActivityModule;
 
+import com.sondo65.basemvp.ui.category.FragmentCategory;
 import com.sondo65.basemvp.ui.main.MainActivity;
-import com.sondo65.basemvp.ui.sample.SampleActivity;
 
 import dagger.Component;
 
@@ -31,6 +31,6 @@ import dagger.Component;
 @Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
 public interface ActivityComponent {
 
-    void inject(SampleActivity sampleActivity);
     void inject(MainActivity mainActivity);
+    void inject(FragmentCategory fragmentCategory);
 }

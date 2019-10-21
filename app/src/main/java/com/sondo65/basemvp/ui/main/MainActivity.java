@@ -7,17 +7,18 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
 import com.google.android.material.navigation.NavigationView;
 import com.sondo65.basemvp.ui.base.BaseActivity;
 
 import android.content.Intent;
 import android.content.Context;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -25,9 +26,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 
 import com.sondo65.basemvp.R;
+import com.sondo65.basemvp.ui.category.FragmentCategory;
 import com.sondo65.basemvp.ui.custom.RoundedImageView;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class MainActivity extends BaseActivity implements MainMvpView {
+
+    private static final String TAG = "MainActivity";
 
     @Inject
     MainPresenter<MainMvpView> mPresenter;
@@ -40,6 +45,11 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @BindView(R.id.navigation_view)
     NavigationView mNavigationView;
+
+    @BindView(R.id.rgMain)
+    RadioGroup rgMain;
+
+    private SlidingUpPanelLayout mLayout;
 
     private TextView mNameTextView;
 
@@ -58,6 +68,8 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mLayout = findViewById(R.id.sliding_layout);
 
         getActivityComponent().inject(this);
         setUnBinder(ButterKnife.bind(this));
@@ -94,6 +106,10 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         mDrawer.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
         setupNavMenu();
+        //innitDefault();
+        listenerGroupRadioButtonClick();
+        listenerSlidingUpPanelChanged();
+
     }
 
     void setupNavMenu() {
@@ -126,5 +142,72 @@ public class MainActivity extends BaseActivity implements MainMvpView {
                             return false;
                     }
                 });
+    }
+
+    private void innitDefault(){
+        mPresenter.onRadioButtonCategoryClick();
+        hiddenSlideUpPanel();
+    }
+
+    private void listenerGroupRadioButtonClick(){
+        rgMain.setOnCheckedChangeListener((radioGroup, i) -> {
+            switch (i){
+                case R.id.rbCategory:
+                    mPresenter.onRadioButtonCategoryClick();
+                    hiddenSlideUpPanel();
+                    break;
+
+            }
+        });
+    }
+
+    private void listenerSlidingUpPanelChanged(){
+
+        mLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                Log.i(TAG, "onPanelSlide, offset " + slideOffset);
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                Log.i(TAG, "onPanelStateChanged " + newState);
+            }
+        });
+        mLayout.setFadeOnClickListener(view -> mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED));
+
+    }
+
+    private void hiddenSlideUpPanel(){
+        mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+    }
+
+    @Override
+    public void showCategoryFragment() {
+        lockDrawer();;
+        getSupportFragmentManager()
+                .beginTransaction()
+                .disallowAddToBackStack()
+                .setCustomAnimations(R.anim.slide_left, R.anim.slide_right)
+                .add(R.id.frm_main, FragmentCategory.newInstance(), FragmentCategory.TAG)
+                .commit();
+    }
+
+    @Override
+    public void onRadioButtonCategoryClick() {
+        showCategoryFragment();
+    }
+
+
+    @Override
+    public void lockDrawer() {
+        if (mDrawer != null)
+            mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    @Override
+    public void unlockDrawer() {
+        if (mDrawer != null)
+            mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }

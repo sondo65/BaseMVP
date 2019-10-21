@@ -21,6 +21,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.sondo65.basemvp.di.ActivityContext;
 import com.sondo65.basemvp.di.PerActivity;
+import com.sondo65.basemvp.ui.category.CategoryMvpPresenter;
+import com.sondo65.basemvp.ui.category.CategoryMvpView;
+import com.sondo65.basemvp.ui.category.CategoryPresenter;
+import com.sondo65.basemvp.ui.main.MainMvpPresenter;
+import com.sondo65.basemvp.ui.main.MainMvpView;
+import com.sondo65.basemvp.ui.main.MainPresenter;
 import com.sondo65.basemvp.utils.rx.AppSchedulerProvider;
 import com.sondo65.basemvp.utils.rx.SchedulerProvider;
 
@@ -62,6 +68,19 @@ public class ActivityModule {
     @Provides
     SchedulerProvider provideSchedulerProvider() {
         return new AppSchedulerProvider();
+    }
+
+    @Provides
+    @PerActivity
+    MainMvpPresenter<MainMvpView> provideMainPresenter(
+            MainPresenter<MainMvpView> presenter) {
+        return presenter;
+    }
+
+    @Provides
+    @PerActivity
+    CategoryMvpPresenter<CategoryMvpView> provideCategoryPresenter(CategoryPresenter<CategoryMvpView> presenter){
+        return presenter;
     }
 
 }
